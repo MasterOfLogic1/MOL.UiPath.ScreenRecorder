@@ -1,0 +1,7 @@
+C:\Users\david\OneDrive\Documents\DeskstonesProjects\Ver\Desky.ScreenRecorder\obj\Debug\Desky.ScreenRecorder.csproj.AssemblyReference.cache
+C:\Users\david\OneDrive\Documents\DeskstonesProjects\Ver\Desky.ScreenRecorder\obj\Debug\Desky.ScreenRecorder.csproj.CoreCompileInputs.cache
+C:\Users\david\OneDrive\Documents\DeskstonesProjects\Ver\Desky.ScreenRecorder\bin\Debug\Images\icon.ico
+C:\Users\david\OneDrive\Documents\DeskstonesProjects\Ver\Desky.ScreenRecorder\bin\Debug\Desky.ScreenRecorder.pdb
+C:\Users\david\OneDrive\Documents\DeskstonesProjects\Ver\Desky.ScreenRecorder\obj\Debug\Desky.ScreenRecorder.pdb
+C:\Users\david\OneDrive\Documents\DeskstonesProjects\Ver\Desky.ScreenRecorder\bin\Debug\Desky.ScreenRecorder.exe
+C:\Users\david\OneDrive\Documents\DeskstonesProjects\Ver\Desky.ScreenRecorder\obj\Debug\Desky.ScreenRecorder.exe
