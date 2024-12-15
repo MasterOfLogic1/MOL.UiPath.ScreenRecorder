@@ -89,6 +89,5 @@ This library is licensed under the MIT License. Refer to the LICENSE file for mo
 
 ## Support
 For issues or feature requests, please contact:
-- Email: david.oku1t@outlook.com
-- GitHub: [MOL.Uipath.ScreenRecorder Issues](https://github.com/MasterOfLogic/MOL.Uipath.ScreenRecorder/issues)
+- Email: david.oku1@outlook.com
 
