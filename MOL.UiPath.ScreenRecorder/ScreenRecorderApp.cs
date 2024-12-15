@@ -16,12 +16,6 @@ namespace MOL.Uipath.ScreenRecorder
                 File.Delete(videoOutputFilePath);
             }
 
-            //Ensure output file is valid mp4 path
-            if (!Path.GetExtension(videoOutputFilePath).ToLower().Equals(".mp4"))
-            {
-                throw new Exception("Invalid output file type, please provide a .mp4 file path");
-            }
-
             if(screenWidth <= 0) 
             {
                 //default screen width
