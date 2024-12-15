@@ -77,6 +77,17 @@ When the Desky.ScreenRecorder console application is launched for the first time
 MOL.Uipath.ScreenRecorder is the corresponding UiPath library. It contains an activity that invokes Desky.ScreenRecorder, passing command-line arguments to the console application as specified in the activity's properties. When the activity is used, the console application runs on a new thread.
 
 ---
+### Dpendecy
+System.Activities: Provides support for creating workflows and activities in .NET.
+
+FFmpeg Library(downloaded or initialized automatically if not present):  The FFmpeg is used for capturing and encoding screen recordings into the output video format (e.g., `.mp4`).
+Screen Recorder Console Application (downloaded or initialized automatically if not present):The application relies on a bundled screen recorder executable for managing the recording logic.
+
+.NET Framework/Runtime: Ensure the required .NET version (e.g., .NET Framework 4.6.5 or .NET Core) is installed on the machine running the application.
+
+Target Machine must not have internet restrictions of accessing from github
+
+---
 
 ## Known Limitations
 - The library currently supports only Windows-Legacy projects in UiPath.
