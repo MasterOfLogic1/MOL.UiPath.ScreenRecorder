@@ -1,0 +1,5 @@
+Desky.ScreenRecorder is a console application compiled into a .exe file that works with the FFmpeg library. Everything you need to know about FFmpeg can be found here.
+
+When the Desky.ScreenRecorder console application is launched for the first time on any machine, it downloads all the dependencies needed to run the recorder, including FFmpeg. The application starts recording based on instructions provided via command-line arguments.
+
+MOL.Uipath.ScreenRecorder is the corresponding UiPath library. It contains an activity that invokes Desky.ScreenRecorder, passing command-line arguments to the console application as specified in the activity's properties. When the activity is used, the console application runs on a new thread.

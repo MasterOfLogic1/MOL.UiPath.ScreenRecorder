@@ -10,7 +10,7 @@ class Program
         // Check if the arguments are passed
         if (args.Length < 1)
         {
-            Console.WriteLine("Usage: ScreenRecorder <output_video_path> [screen_width] [screen_height] [should_stop_after_target_process_ends] [should_stop_after_max_duration] [max_duration] [target_process_name]");
+            Console.WriteLine("Usage: ScreenRecorder <output_video_path> [screen_width] [screen_height] [should_stop_after_target_process_ends] [target_process_name] [should_stop_after_max_duration] [max_duration]");
             throw new Exception("Please provide <output_video_path> in args as a location to save video output");
         }
 
@@ -20,11 +20,10 @@ class Program
         // Default values for screen width and height
         int screenWidth = 1920;
         int screenHeight = 1080;
-
         bool shouldStopAfterTargetProcessEnds = false;
-        bool shouldStopAfterMaxDuration = false;
-        int maxDuration = 0;
-        string targetProcessName = "notepad";
+        bool shouldStopAfterMaxDuration = true;
+        float maxDuration = 10;
+        string targetProcessName = "";
 
         // Check if screen width and height are passed, and parse them
         if (args.Length > 1 && !int.TryParse(args[1], out screenWidth))
@@ -44,20 +43,39 @@ class Program
         {
             Console.WriteLine("Invalid value for shouldStopAfterTargetProcessEnds. Using default value of false.");
         }
+        else
+        {
+            if (args.Length > 4 && !string.IsNullOrEmpty(args[4]))
+            {
+                targetProcessName = args[4];
+                shouldStopAfterMaxDuration = false;
+                maxDuration = 0;
+                Console.WriteLine("ScreenRecorder will start and stop when " + targetProcessName + " process no longer runs");
+            }
+            else
+            {
+                targetProcessName = "";
+                shouldStopAfterTargetProcessEnds = false;
+            }
+
+        }
+
 
         if (!shouldStopAfterTargetProcessEnds)
         {
             // Parse shouldStopAfterMaxDuration (true/false)
-            if (args.Length > 4 && !bool.TryParse(args[4], out shouldStopAfterMaxDuration))
+            if (args.Length > 5 && !bool.TryParse(args[5], out shouldStopAfterMaxDuration))
             {
                 Console.WriteLine("Invalid value for shouldStopAfterMaxDuration. Using default value of false.");
             }
 
             // Parse maxDuration (int)
-            if (args.Length > 5 && !int.TryParse(args[5], out maxDuration))
+            if (args.Length > 6 && !float.TryParse(args[6], out maxDuration))
             {
-                Console.WriteLine("Invalid value for maxDuration. Using default value of 0.");
+                Console.WriteLine("Invalid value for maxDuration. Using default value of 10 secs.");
             }
+
+            Console.WriteLine("ScreenRecorder will start and stop after " + maxDuration.ToString() + " secs");
 
         }
 

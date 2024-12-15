@@ -159,7 +159,7 @@ namespace Desky.ScreenRecorder.Orchestrator
         }
 
 
-        internal async Task StartRecording(int maxDuration)
+        internal async Task StartRecording(float maxDuration)
         {
             if (isRecording) return;
 
