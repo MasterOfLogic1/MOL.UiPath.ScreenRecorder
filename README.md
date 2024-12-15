@@ -1,7 +1,7 @@
 # MOL.Uipath.ScreenRecorder
 
 ## Overview
-The **MOL.Uipath.ScreenRecorder** library offers a seamless way to record the screen of a target machine directly from your UiPath workflows. This library is specifically designed to simplify screen recording tasks, making it an excellent tool for process automation and user monitoring scenarios.
+This UiPath library provides an activity that effortlessly sets up and initiates a screen recording application on the target machine. It captures the screen and saves the recorded output to a specified location. By running the recording on a separate thread, it ensures that other processes are not disrupted. This activity is perfect for situations where you want to monitor and record server activity while your bot performs its tasks, without interrupting ongoing operations.
 
 ---
 
@@ -32,6 +32,7 @@ This library is compatible  with **UiPath Windows & Windows-Legacy projects** an
 1. Download the `MOL.Uipath.ScreenRecorder` package from the [Nuget Org](https://www.nuget.org/packages/MOL.Uipath.ScreenRecorder) or nuget on your Uipath Pacage manger.
    ![image](https://github.com/user-attachments/assets/21044106-43eb-41da-be7e-1275b69061ab)
 
+
 3. Import the package into your UiPath project:
    - Open your UiPath project.
    - Go to the **Manage Packages** menu.
@@ -42,6 +43,8 @@ This library is compatible  with **UiPath Windows & Windows-Legacy projects** an
 ## How to Use
 
 ### Input Properties
+- **OutputFolderPath** *(String)*: Folder path where the recording will be saved.
+- **OutputVideoFilenameWithoutExtension** *(String)*: The desired name of ouput video file without its extension default is current datetimestamp in ddMMyyyyHHmms.
 - **ScreenWidth** *(Integer)*: The width of the screen to record default is 1920.
 - **ScreenHeight** *(Integer)*: The height of the screen to record - default 1080.
 - **ShouldStopAfterTargetProcessEnds** *(Boolean)*: Whether the recording should stop when the target process ends- default is false.
@@ -49,8 +52,14 @@ This library is compatible  with **UiPath Windows & Windows-Legacy projects** an
 - **ShouldStopAfterMaxDuration** *(Boolean)*: Whether the recording should stop after the maximum duration is reached - default is true.
 - **MaxDurationInSeconds** *(Float)*: The maximum duration of the recording in seconds- default is 30 secs.
 
+  ![image](https://github.com/user-attachments/assets/a9c1d9b7-29b6-4402-a1ba-2ffc4cbf6de1)
+
+
+  ![image](https://github.com/user-attachments/assets/26c84fbe-c98d-4d39-b438-3d2fc04b2772)
+
+
 ### Output
-- **VideoOutputFilePath** *(String)*: File path where the recording will be saved.
+
 
 ### Example Usage
 1. Drag and drop the **Start Screen Recorder** activity into your UiPath workflow.
