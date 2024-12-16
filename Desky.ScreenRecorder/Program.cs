@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Desky.ScreenRecorder.Orchestrator;
 
@@ -6,7 +7,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-
+        //args = new[] { "C:\\Users\\test\\OneDrive\\LBU\\trash\\tester.mp4" };
         // Check if the arguments are passed
         if (args.Length < 1)
         {
@@ -17,12 +18,17 @@ class Program
         // Get video output file path from the first argument
         string videoOutputFilePath = args[0];
 
+        if(File.Exists(videoOutputFilePath))
+        {
+            throw new Exception("<output_video_path> file in args already exists");
+        }
+
         // Default values for screen width and height
         int screenWidth = 1920;
         int screenHeight = 1080;
         bool shouldStopAfterTargetProcessEnds = false;
         bool shouldStopAfterMaxDuration = true;
-        float maxDuration = 10;
+        float maxDuration = 30;
         string targetProcessName = "";
 
         // Check if screen width and height are passed, and parse them

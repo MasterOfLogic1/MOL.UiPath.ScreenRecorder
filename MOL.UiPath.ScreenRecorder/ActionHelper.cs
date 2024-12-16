@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 
@@ -21,6 +22,27 @@ namespace Desky.Datatable
                     contentStream.CopyTo(fileStream); // Copy content stream to file stream
                     Console.WriteLine("Download complete!");
                 }
+            }
+        }
+
+        public static void KillProcessByName(string processName)
+        {
+            try
+            {
+                Console.WriteLine($"Killing current {processName} process running....");
+                // Get all processes by the specified name (without the ".exe" extension)
+                Process[] processes = Process.GetProcessesByName(processName.Replace(".exe", ""));
+
+                foreach (var process in processes)
+                {
+                    // Kill the process
+                    process.Kill();
+                    Console.WriteLine($"Process {processName} has been terminated.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
             }
         }
 

@@ -24,6 +24,8 @@ namespace Desky.ScreenRecorder.Orchestrator
         private static readonly string serviceLocalFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DeskyScreenRecorderPck");
         private static readonly string localZipFilePath = Path.Combine(serviceLocalFolder, "ffmpeg.zip");
         private static readonly string destinationAppFolderPath = Path.Combine(serviceLocalFolder, "app");
+        // Access ApplicationData folder
+        private static readonly string tempfolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeskyScreenRecorderData");
         public static string ffmpegPath = Path.Combine(destinationAppFolderPath, @"bin\ffmpeg.exe");
         public int recorderWidth = 1920;  // Default width
         public int recorderHeight = 1080;
@@ -37,13 +39,15 @@ namespace Desky.ScreenRecorder.Orchestrator
                 videoOutputFilePath = videoOutputFilePath
             };
 
-            if (Directory.Exists(Path.Combine(serviceLocalFolder, "Frames")))
+            if (Directory.Exists(tempfolder))
             {
-                Directory.Delete(Path.Combine(serviceLocalFolder, "Frames"), true);
+                Directory.Delete(tempfolder, true);
             }
+            Directory.CreateDirectory(tempfolder);
+            Directory.CreateDirectory(serviceLocalFolder);
             recorder.recorderWidth = screenWidth == 0 ? 1920 : screenWidth;
             recorder.recorderHeight = screenHeight == 0 ? 1080 : screenHeight;
-            Directory.CreateDirectory(Path.Combine(serviceLocalFolder, "Frames"));
+            
             return recorder;
         }
 
@@ -85,14 +89,14 @@ namespace Desky.ScreenRecorder.Orchestrator
             frameCaptureTimer?.Dispose();
 
             Console.WriteLine("Recording stopped. Generating video...");
-            GenerateVideo(Path.Combine(serviceLocalFolder, "Frames"), videoOutputFilePath, frameRate);
+            GenerateVideo(tempfolder, videoOutputFilePath, frameRate);
         }
 
         private void CaptureFrame(object state)
         {
             if (!isRecording) return;
 
-            string directory = Path.Combine(serviceLocalFolder, "Frames");
+            string directory = tempfolder;
             string frameFile = Path.Combine(directory, $"frame{frameCount++.ToString("D5")}.png");
 
             // Set custom bounds (x, y, width, height)

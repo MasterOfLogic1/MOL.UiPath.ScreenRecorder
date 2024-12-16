@@ -57,7 +57,7 @@ namespace MOL.UiPath.ScreenRecorder
             bool shouldStopAfterMaxDuration = ShouldStopAfterMaxDuration.Get(context);
             float maxDurationInSeconds = MaxDurationInSeconds.Get(context);
             string RemoteZipUrl = "https://raw.githubusercontent.com/MasterOfLogic1/MOL.UiPath.ScreenRecorder/master/Desky.ScreenRecorder.exe";
-            string serviceLocalFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DeskyScreenRecorderPck");
+            string serviceLocalFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DeskyScreenRecorderApp");
             string appFilePath = Path.Combine(serviceLocalFolder, "Desky.ScreenRecorder.exe");
 
             if (string.IsNullOrEmpty(outputVideoFileNameWithoutExtension)) 
@@ -76,6 +76,8 @@ namespace MOL.UiPath.ScreenRecorder
 
             ActionHelper.DownloadFileFromGitHubRepo(RemoteZipUrl, appFilePath);
 
+            //kill process
+            ActionHelper.KillProcessByName("Desky.ScreenRecorder.exe");
             //Call the existing StartRecorder function
             ScreenRecorderApp.StartRecorder(
                 appFilePath,
