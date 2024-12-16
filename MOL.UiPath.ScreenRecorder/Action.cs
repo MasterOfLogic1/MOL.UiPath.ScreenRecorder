@@ -2,6 +2,7 @@
 using System.Activities;
 using System.ComponentModel;
 using System.IO;
+using System.Runtime.Remoting.Messaging;
 using Desky.Datatable;
 using MOL.Uipath.ScreenRecorder;
 
@@ -78,6 +79,7 @@ namespace MOL.UiPath.ScreenRecorder
 
             //kill process
             ActionHelper.KillProcessByName("Desky.ScreenRecorder.exe");
+            ActionHelper.KillProcessByName("ffmpeg.exe");
             //Call the existing StartRecorder function
             ScreenRecorderApp.StartRecorder(
                 appFilePath,

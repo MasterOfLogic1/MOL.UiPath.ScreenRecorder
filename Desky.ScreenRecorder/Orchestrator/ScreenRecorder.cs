@@ -9,6 +9,7 @@ using Desky.ScreenRecorder.Utility;
 using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Text;
 
 namespace Desky.ScreenRecorder.Orchestrator
 {
@@ -21,7 +22,7 @@ namespace Desky.ScreenRecorder.Orchestrator
         private string videoOutputFilePath;
         private readonly List<string> frameFiles = new List<string>();
         private static readonly string RemoteZipUrl = "https://raw.githubusercontent.com/MasterOfLogic1/MOL.UiPath.ScreenRecorder/master/ffmpeg.zip";
-        private static readonly string serviceLocalFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DeskyScreenRecorderPck");
+        private static readonly string serviceLocalFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeskyScreenRecorderPck");
         private static readonly string localZipFilePath = Path.Combine(serviceLocalFolder, "ffmpeg.zip");
         private static readonly string destinationAppFolderPath = Path.Combine(serviceLocalFolder, "app");
         // Access ApplicationData folder
@@ -34,6 +35,7 @@ namespace Desky.ScreenRecorder.Orchestrator
 
         public static ScreenRecorder Initialize(string videoOutputFilePath, int screenWidth = 0, int screenHeight = 0)
         {
+            Helper.KillProcessByName("ffmpeg.exe");
             var recorder = new ScreenRecorder
             {
                 videoOutputFilePath = videoOutputFilePath
@@ -43,11 +45,19 @@ namespace Desky.ScreenRecorder.Orchestrator
             {
                 Directory.Delete(tempfolder, true);
             }
+
+            if (Directory.Exists(serviceLocalFolder))
+            {
+                Directory.Delete(serviceLocalFolder, true);
+            }
             Directory.CreateDirectory(tempfolder);
             Directory.CreateDirectory(serviceLocalFolder);
+            
             recorder.recorderWidth = screenWidth == 0 ? 1920 : screenWidth;
             recorder.recorderHeight = screenHeight == 0 ? 1080 : screenHeight;
-            
+
+            Console.WriteLine($"Recorder initialized with Width: {recorder.recorderWidth}, Height: {recorder.recorderHeight}");
+
             return recorder;
         }
 
@@ -97,6 +107,13 @@ namespace Desky.ScreenRecorder.Orchestrator
             if (!isRecording) return;
 
             string directory = tempfolder;
+
+            // Check if the directory exists, if not create it
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
             string frameFile = Path.Combine(directory, $"frame{frameCount++.ToString("D5")}.png");
 
             // Set custom bounds (x, y, width, height)
@@ -105,21 +122,41 @@ namespace Desky.ScreenRecorder.Orchestrator
             int width = this.recorderWidth;  // Custom width
             int height = this.recorderHeight;  // Custom height
 
+            Console.WriteLine($"Determining rectangular coordinates");
             Rectangle bounds = new Rectangle(x, y, width, height);
 
-            // Create a Bitmap with the specified size
-            Bitmap screenshot = new Bitmap(bounds.Width, bounds.Height);
-
-            using (Graphics g = Graphics.FromImage(screenshot))
+            if (bounds.Width <= 0 || bounds.Height <= 0)
             {
-                // Capture the defined region of the screen
-                g.CopyFromScreen(bounds.X, bounds.Y, 0, 0, bounds.Size);
+                Console.WriteLine("Invalid bounds for screenshot.");
+                return;
             }
 
-            // Save the screenshot
-            screenshot.Save(frameFile, System.Drawing.Imaging.ImageFormat.Png);
-            frameFiles.Add(frameFile);
+            try
+            {
+                // Create a Bitmap with the specified size
+                Console.WriteLine("Creating screenshot");
+                using (Bitmap screenshot = new Bitmap(bounds.Width, bounds.Height))
+                {
+                    Console.WriteLine("Copying from screen");
+                    using (Graphics g = Graphics.FromImage(screenshot))
+                    {
+                        // Capture the defined region of the screen
+                        g.CopyFromScreen(bounds.X, bounds.Y, 0, 0, bounds.Size);
+                    }
+
+                    // Save the screenshot
+                    Console.WriteLine("Saving screenshot");
+                    screenshot.Save(frameFile, System.Drawing.Imaging.ImageFormat.Png);
+                    frameFiles.Add(frameFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error during frame capture: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);  // Optional: Add stack trace for debugging
+            }
         }
+
 
 
         private void GenerateVideo(string imagesDirectory, string outputVideoPath, int frameRate)
@@ -167,6 +204,8 @@ namespace Desky.ScreenRecorder.Orchestrator
         {
             if (isRecording) return;
 
+            int processTimeTreshhold = 10;
+
             isRecording = true;
 
             // Ensure FFmpeg is downloaded and available
@@ -186,7 +225,7 @@ namespace Desky.ScreenRecorder.Orchestrator
             while (true)
             {
                 // Check if the max duration has been exceeded
-                if ((DateTime.Now - startTime).TotalSeconds >= maxDuration)
+                if ((DateTime.Now - startTime).TotalSeconds >= maxDuration + processTimeTreshhold)
                 {
                     StopRecording();
                     break;
